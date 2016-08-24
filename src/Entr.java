@@ -8,15 +8,23 @@ public class Entr  {
     private int key;
     private int value;
     private Entr next;
+    private Entr prev;
 
     Entr(int k, int v){
         key = k;
         value = v;
+        next = null;
+        prev = null;
     }
     Entr(int k, int v, Entr temp){
         key = k;
         value = v;
         next = temp;
+        temp.addPrev(this);
+    }
+
+    public void addPrev(Entr temp){
+        prev = temp;
     }
 
     public String toString(){
@@ -28,8 +36,16 @@ public class Entr  {
             return next;
         else return null;
     }
+    public Entr hasPrev(){
+        if (prev != null)
+            return prev;
+        else return null;
+    }
 
     public int getValue(){
         return value;
+    }
+    public int getKey(){
+        return key;
     }
 }
