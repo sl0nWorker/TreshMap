@@ -45,11 +45,14 @@ public class Entr  {
         else return null;
     }
 
-
+    public void setValue(int v){
+        value = v;
+    }
+    public void setKey(int k){
+        key = k;
+    }
     public int getValue(){
         return value;
     }
-    public int getKey(){
-        return key;
-    }
+    public int getKey(){return key;}
 }

@@ -5,11 +5,13 @@ import java.util.Map.Entry;
  */
 public class TreshMap {
 
+    int size;
     int capicity;
     Entr[] table;
 
     TreshMap() {
-        capicity = 16;
+        size = 0;
+        capicity = 2;
         table = new Entr[capicity];
     }
 
@@ -18,14 +20,43 @@ public class TreshMap {
     }
 
     public void put(int key, int value) {
+
+        if (size >= capicity){
+            increaseSize();
+        }
         int hash = hash(key);
         int index = hash % capicity;
+        size++;
         //Проверка на коллизии; Если коллизия есть сохраняем в темп значение table[index],
         // вставляем в голову новое значение и присваеваем следущему за головой элемент = table[index]
         if (table[index] != null) {
             Entr temp = table[index];
             table[index] = new Entr(key, value, temp);
         } else table[index] = new Entr(key, value);
+    }
+
+    private void increaseSize() {
+
+        int key,value,hash,index;
+
+        capicity = capicity * 2;
+        Entr[] newTable = new Entr[capicity];
+        Entr[] tempTable = table;
+        for (int i = 0; i < tempTable.length; i++) {
+            if (tempTable[i] != null){
+                key = tempTable[i].getKey();
+                value = tempTable[i].getKey();
+                hash = hash(key);
+                index = hash % capicity;
+                //Обработка коллизий при пересчете хешей, если будет коллизия то вставляется в голову новый элемент
+                // а next = предыдущий
+                if (newTable[index] != null) {
+                    Entr temp = newTable[index];
+                    newTable[index] = new Entr(key, value, temp);
+                } else newTable[index] = new Entr(key, value);
+            }
+        }
+        table = newTable;
     }
 
     public boolean containsKey(int key) {
