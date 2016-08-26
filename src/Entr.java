@@ -26,6 +26,9 @@ public class Entr  {
     public void addPrev(Entr temp){
         prev = temp;
     }
+    public void addNext(Entr temp){
+        next = temp;
+    }
 
     public String toString(){
         return "key = " + key + " value = " + value + " ";
@@ -41,6 +44,7 @@ public class Entr  {
             return prev;
         else return null;
     }
+
 
     public int getValue(){
         return value;

@@ -30,26 +30,57 @@ public class TreshMap {
 
     public boolean containsKey(int key) {
         Entr field;
-        //Прбегаем по массиву map
-        for (int i = 0; i < table.length; i++) {
-            if (table[i] != null) {
-                field = table[i];
-                //Пробигаем по списку элементов
-                while (field != null) {
-                    if (field.getKey() == key) return true;
-                    field = field.hasNext();
-                }
+        int hash = hash(key);
+        int index = hash % capicity;
+        if (table[index] != null) {
+            field = table[index];
+            //Пробегаем по списку элементов
+            while (field != null) {
+                if (field.getKey() == key) return true;
+                field = field.hasNext();
             }
         }
         return false;
     }
 
     public boolean remove(int key) {
+
         if (this.containsKey(key)) {
             int hash = hash(key);
             int index = hash % capicity;
-            table[index] = null;
-            return true;
+            Entr field = table[index];
+            Entr temp = table[index];
+            //Пробегаем по списку элементов
+            while (field != null) {
+                if (field.getKey() == key) {
+                    // Если нет коллизий, и список состоит только из головы, тогда заменяем голову на null
+                    if (field.hasPrev() == null && field.hasNext() == null) {
+                        table[index] = null;
+                        return true;
+                    }
+                    //Если есть коллизии и элемент с заданным ключом находится в голове списка
+                    else if (field.hasPrev() == null && field.hasNext() != null) {
+                        temp = field.hasNext();
+                        temp.addPrev(null);
+                        table[index] = temp;
+                        field = null;
+                        return true;
+                        // Если элемент находится в конце списка
+                    } else if (field.hasNext() == null) {
+                        field = null;
+                        return true;
+                        // Если элемент находится в середине ( есть следущий и предыдущий)
+                    } else if (field.hasNext() != null && field.hasPrev() != null) {
+                        temp = field.hasPrev();
+                        temp.addNext(field.hasNext());
+                        field = null;
+                        return true;
+                    }
+                    return false;
+                }
+                field = field.hasNext();
+            }
+
         }
         return false;
     }
